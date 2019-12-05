@@ -97,7 +97,7 @@ public class Sheet {
         int count = 0;
         for (Shelf shelf : shelves)
             count += shelf.getShapes().size();
-        str.append(String.format("[%d/20] [%f%%]\n", count, ((double) getUsedArea() / (double) getArea()) * 100));
+        str.append(String.format("[%d/20] [%.1f%%]\n", count, ((double) getUsedArea() / (double) getArea()) * 100));
         str.append("===============\n");
         for (Shelf s : shelves) {
             str.append(String.format("Shelf %d: %s\n", i, s));

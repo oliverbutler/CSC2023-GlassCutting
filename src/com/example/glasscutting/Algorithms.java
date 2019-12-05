@@ -56,6 +56,14 @@ public class Algorithms {
         return 1; // Need a new shelf
     }
 
+    private Integer willFit(Shape shape, Integer xFree, Integer yFree) {
+        if (shape.getHeight() <= yFree && shape.getWidth() <= xFree)
+            return 0;
+        if (shape.getWidth() <= yFree && shape.getHeight() <= xFree)
+            return 1;
+        return 2;
+    }
+
     /**
      * This method is used to implement the next fit algorithm
      * 
@@ -75,43 +83,66 @@ public class Algorithms {
 
         Sheet sheet = new Sheet();
         Shelf shelf = new Shelf();
-        sheet.addShelf(shelf);
-        usedSheets.add(sheet);
+        int yFreeSheet = sheet.getHeight();
+        int noShapes = 0;
 
-        Integer yFreeSheet = sheet.getHeight(); // todo: implement a willFit() method, to be seperate to place
         for (Shape shape : shapes) {
-            Integer result = 1;
-            while (result != 0) {
-                if (shelf.getShapes().size() == 20) { // fixme: creating empty shelves
-                    sheet = new Sheet();
-                    shelf = new Shelf();
-                    sheet.addShelf(shelf);
-                    usedSheets.add(sheet);
-                    yFreeSheet = sheet.getHeight();
-                }
-                result = optimalPlace(shelf, shape, sheet.getWidth() - shelf.getWidth(), yFreeSheet);
-                if (result == 0) {
-                    if (shelf.getShapes().size() == 1)
-                        yFreeSheet -= shelf.getHeight();
+            int result = 21;
+            if (noShapes == 20) {
+                sheet.addShelf(shelf);
+                usedSheets.add(sheet);
+                sheet = new Sheet();
+                shelf = new Shelf();
+                yFreeSheet = sheet.getHeight();
+                noShapes = 0;
+            }
+            while (result > 1) {
+                boolean firstOnShelf = false;
+                if (shelf.getHeight() == 0)
+                    firstOnShelf = true;
+                int yMax = yFreeSheet;
+                if (!firstOnShelf)
+                    yMax = shelf.getHeight();
+                result = willFit(shape, sheet.getWidth() - shelf.getWidth(), yMax);
+                switch (result) {
+                case 0:
+                    if (firstOnShelf)
+                        yFreeSheet -= shape.getHeight();
+                    shelf.place(shape);
+                    noShapes++;
                     break;
-                }
-                if (result == 1) { // new shelf
-                    shelf = new Shelf();
-                    sheet.addShelf(shelf);
-                }
-                if (result == 2) { // new shelf WONT FIT so new sheet
-                    if (shelf.getShapes().isEmpty())
-                        sheet.getShelves().remove(shelf);
-                    sheet = new Sheet();
-                    shelf = new Shelf();
-                    sheet.addShelf(shelf);
-                    usedSheets.add(sheet);
-                    yFreeSheet = sheet.getHeight();
+                case 1:
+                    shape.rotate();
+                    if (firstOnShelf)
+                        yFreeSheet -= shape.getHeight();
+                    shelf.place(shape);
+                    noShapes++;
+                    break;
+                case 2:
+                    if (firstOnShelf) { // If wont fit, and new shelf, need a new sheet
+                        usedSheets.add(sheet);
+                        sheet = new Sheet();
+                        yFreeSheet = sheet.getHeight();
+                    } else if (yMax == yFreeSheet) { // no more shelfs will fit, so new sheet
+                        sheet.addShelf(shelf);
+                        usedSheets.add(sheet);
+                        sheet = new Sheet();
+                        shelf = new Shelf();
+                        yFreeSheet = sheet.getHeight();
+                    } else { // else get a new
+                        sheet.addShelf(shelf);
+                        shelf = new Shelf();
+                    }
+                    break;
                 }
             }
         }
 
+        sheet.addShelf(shelf);
+        usedSheets.add(sheet);
+
         return usedSheets;
+
     }
 
     /**

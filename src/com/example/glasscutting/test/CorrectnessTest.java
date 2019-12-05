@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.glasscutting.Algorithms;
+import com.example.glasscutting.Render;
 import com.example.glasscutting.Shape;
 import com.example.glasscutting.Sheet;
 import com.example.glasscutting.Shelf;
@@ -57,8 +58,8 @@ public class CorrectnessTest {
         }
         List<Sheet> sorted = alg.nextFit(shapes);
 
-        for (Sheet s : sorted)
-            System.out.println(s);
+        // for (Sheet s : sorted)
+        // System.out.println(s);
 
         int shapesPerSheet = 0;
         for (Shelf shelf : sorted.get(0).getShelves())
@@ -75,6 +76,8 @@ public class CorrectnessTest {
         shapes.add(new Shape(100, 100));
         shapes.add(new Shape(100, 50));
         shapes.add(new Shape(200, 250));
+        shapes.add(new Shape(100, 100));
+        shapes.add(new Shape(1, 1));
 
         List<Sheet> sorted = alg.nextFit(shapes);
         for (Sheet s : sorted)
