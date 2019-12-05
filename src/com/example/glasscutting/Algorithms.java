@@ -29,27 +29,14 @@ public class Algorithms {
         Integer yFreeShelf = yFreeSheet;
         if (shelf.getHeight() != 0)
             yFreeShelf = shelf.getHeight();
-
-        if (shape.getHeight() > shape.getWidth()) {
-            if (shape.getHeight() <= yFreeShelf && shape.getWidth() <= xFreeShelf) {
-                shelf.place(shape);
-                return 0;
-            }
-            if (shape.getWidth() <= yFreeShelf && shape.getHeight() <= xFreeShelf) {
-                shape.rotate();
-                shelf.place(shape);
-                return 0;
-            }
-        } else {
-            if (shape.getWidth() <= yFreeShelf && shape.getHeight() <= xFreeShelf) {
-                shape.rotate();
-                shelf.place(shape);
-                return 0;
-            }
-            if (shape.getHeight() <= yFreeShelf && shape.getWidth() <= xFreeShelf) {
-                shelf.place(shape);
-                return 0;
-            }
+        if (shape.getHeight() <= yFreeShelf && shape.getWidth() <= xFreeShelf) {
+            shelf.place(shape);
+            return 0;
+        }
+        if (shape.getWidth() <= yFreeShelf && shape.getHeight() <= xFreeShelf) {
+            shape.rotate();
+            shelf.place(shape);
+            return 0;
         }
         if (shelf.getHeight() == 0)
             return 2;

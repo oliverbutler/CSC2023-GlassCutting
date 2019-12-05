@@ -69,9 +69,10 @@ public class CorrectnessTest {
 
     @Test
     public void nextFitCorrectExample1() {
-        shapes.add(new Shape(150, 100));
         shapes.add(new Shape(50, 50));
-        shapes.add(new Shape(75, 75));
+        shapes.add(new Shape(49, 49));
+        shapes.add(new Shape(48, 48));
+        shapes.add(new Shape(100, 100));
         shapes.add(new Shape(75, 200));
         shapes.add(new Shape(100, 100));
         shapes.add(new Shape(100, 50));
