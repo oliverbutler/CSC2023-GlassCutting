@@ -58,8 +58,8 @@ public class CorrectnessTest {
         }
         List<Sheet> sorted = alg.nextFit(shapes);
 
-        // for (Sheet s : sorted)
-        // System.out.println(s);
+        for (Sheet s : sorted)
+            System.out.println(s);
 
         int shapesPerSheet = 0;
         for (Shelf shelf : sorted.get(0).getShelves())
@@ -80,7 +80,7 @@ public class CorrectnessTest {
         shapes.add(new Shape(100, 100));
         shapes.add(new Shape(1, 1));
 
-        List<Sheet> sorted = alg.firstFit(shapes);
+        List<Sheet> sorted = alg.nextFit(shapes);
         for (Sheet s : sorted)
             System.out.println(s);
     }
