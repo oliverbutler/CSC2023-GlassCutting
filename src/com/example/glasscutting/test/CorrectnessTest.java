@@ -80,7 +80,7 @@ public class CorrectnessTest {
         shapes.add(new Shape(100, 100));
         shapes.add(new Shape(1, 1));
 
-        List<Sheet> sorted = alg.nextFit(shapes);
+        List<Sheet> sorted = alg.firstFit(shapes);
         for (Sheet s : sorted)
             System.out.println(s);
     }

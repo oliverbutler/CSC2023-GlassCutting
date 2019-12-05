@@ -14,34 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Algorithms {
-    /**
-     * Takes a shelf and a shape and attempts to place the shape within it
-     * optimally, tends towards tall shelves as those shelves can best fit more
-     * items
-     * 
-     * @param shelf      The shelf to put the shape onto
-     * @param shape      The shape to put into the shelf
-     * @param yFreeSheet Space free to the top of the sheet
-     * @param xFreeShelf Space free left on the shelf
-     * @return True if placed correctly, false if not placed
-     */
-    private Integer optimalPlace(Shelf shelf, Shape shape, Integer xFreeShelf, Integer yFreeSheet) {
-        Integer yFreeShelf = yFreeSheet;
-        if (shelf.getHeight() != 0)
-            yFreeShelf = shelf.getHeight();
-        if (shape.getHeight() <= yFreeShelf && shape.getWidth() <= xFreeShelf) {
-            shelf.place(shape);
-            return 0;
-        }
-        if (shape.getWidth() <= yFreeShelf && shape.getHeight() <= xFreeShelf) {
-            shape.rotate();
-            shelf.place(shape);
-            return 0;
-        }
-        if (shelf.getHeight() == 0)
-            return 2;
-        return 1; // Need a new shelf
-    }
 
     private Integer willFit(Shape shape, Integer xFree, Integer yFree) {
         if (shape.getHeight() <= yFree && shape.getWidth() <= xFree)
@@ -147,62 +119,56 @@ public class Algorithms {
      **/
     public List<Sheet> firstFit(List<Shape> shapes) {
 
-        /*
-         * Start with an empty list of sheets (remember each sheet has a width of 300
-         * and a height of 250 as specified in the Sheet class)
-         */
         List<Sheet> usedSheets = new ArrayList<Sheet>();
-
-        Sheet sheet = new Sheet();
-        Shelf shelf = new Shelf();
-        sheet.addShelf(shelf);
-        usedSheets.add(sheet);
-
         List<Integer> yFreeSheet = new ArrayList<Integer>();
-        yFreeSheet.add(sheet.getHeight());
+
+        Sheet sheet;
+        Shelf shelf;
 
         for (Shape shape : shapes) {
-            Integer result = 1;
-            while (result != 0) {
-                for (int j = 0; j < usedSheets.size(); j++) {
-                    sheet = usedSheets.get(j);
-                    for (int i = 0; i < sheet.getShelves().size(); i++) {
-                        shelf = sheet.getShelves().get(i);
-                        if (shelf.getShapes().size() == 20) {
-                            if (j == usedSheets.size() - 1) {
-                                sheet = new Sheet();
-                                sheet.addShelf(new Shelf());
-                                usedSheets.add(sheet);
-                                yFreeSheet.add(sheet.getHeight());
-                            }
-                        } else {
-                            result = optimalPlace(shelf, shape, sheet.getWidth() - shelf.getWidth(), yFreeSheet.get(j));
-
-                            if (result == 0) {
-                                if (shelf.getShapes().size() == 1)
-                                    yFreeSheet.set(j, yFreeSheet.get(j) - shape.getHeight());
-                                break;
-                            }
-                            if (result == 1 && i == sheet.getShelves().size() - 1) {
-                                sheet.addShelf(new Shelf());
-                            }
-                            if ((result == 2) && j == usedSheets.size() - 1) {
-                                sheet = new Sheet();
-                                sheet.addShelf(new Shelf());
-                                usedSheets.add(sheet);
-                                yFreeSheet.add(sheet.getHeight());
+            Integer result = 3;
+            while (result > 1) {
+                for (int sheetNo = 0; sheetNo <= usedSheets.size(); sheetNo++) {
+                    if (sheetNo == usedSheets.size()) { // if a new sheet is required, add it
+                        sheet = new Sheet();
+                        shelf = new Shelf();
+                        shelf.place(shape);
+                        sheet.addShelf(shelf);
+                        yFreeSheet.add(sheet.getHeight() - shape.getHeight());
+                        usedSheets.add(sheet);
+                        result = 0;
+                    } else {
+                        sheet = usedSheets.get(sheetNo);
+                        for (int shelfNo = 0; shelfNo <= sheet.getShelves().size(); shelfNo++) {
+                            if (shelfNo == sheet.getShelves().size()) { // if last shelf on a sheet
+                                result = willFit(shape, sheet.getWidth(), yFreeSheet.get(sheetNo));
+                                if (result <= 1) {
+                                    if (result == 1)
+                                        shape.rotate();
+                                    shelf = new Shelf();
+                                    shelf.place(shape);
+                                    sheet.addShelf(shelf);
+                                    yFreeSheet.set(sheetNo, yFreeSheet.get(sheetNo) - shape.getHeight());
+                                    break;
+                                }
+                            } else {
+                                shelf = sheet.getShelves().get(shelfNo);
+                                result = willFit(shape, sheet.getWidth() - shelf.getWidth(), shelf.getHeight());
+                                if (result <= 1) {
+                                    if (result == 1)
+                                        shape.rotate();
+                                    shelf.place(shape);
+                                    break;
+                                }
                             }
                         }
                     }
-                    if (result == 0)
+                    if (result <= 1)
                         break;
                 }
+
             }
         }
-        /*
-         * Add in your own code so that the method will place all the shapes according
-         * to FirstFit under the assumptions mentioned in the spec
-         */
 
         return usedSheets;
     }

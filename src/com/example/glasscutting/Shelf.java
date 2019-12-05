@@ -72,7 +72,7 @@ public class Shelf {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append(String.format("{ %d x %d} ", getWidth(), getHeight()));
+        str.append(String.format("{ %d x %d } ", getWidth(), getHeight()));
         for (Shape s : shapes) {
             str.append(s);
         }
