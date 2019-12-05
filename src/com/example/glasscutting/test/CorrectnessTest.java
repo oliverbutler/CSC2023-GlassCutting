@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.glasscutting.Algorithms;
-import com.example.glasscutting.Render;
 import com.example.glasscutting.Shape;
 import com.example.glasscutting.Sheet;
 import com.example.glasscutting.Shelf;
@@ -33,9 +32,9 @@ public class CorrectnessTest {
         assertTrue(sorted.size() == 1);
         assertTrue(sorted.get(0).getShelves().size() == 1);
         assertTrue(sorted.get(0).getShelves().get(0).getShapes().size() == 3);
-        System.out.println(sorted.get(0).getShelves().get(0));
+        // System.out.println(sorted.get(0).getShelves().get(0));
         assertTrue(
-                sorted.get(0).getShelves().get(0).toString().equals("{ 190 x 50} [ 50 x 50 ][ 40 x 50 ][ 100 x 50 ]"));
+                sorted.get(0).getShelves().get(0).toString().equals("{ 190 x 50 } [ 50 x 50 ][ 40 x 50 ][ 100 x 50 ]"));
     }
 
     @Test
@@ -47,8 +46,8 @@ public class CorrectnessTest {
         List<Sheet> sorted = alg.nextFit(shapes);
         assertTrue(sorted.get(0).getShelves().size() == 2);
         assertTrue(sorted.get(0).getShelves().get(0).toString()
-                .equals("{ 297 x 100} [ 100 x 100 ][ 99 x 99 ][ 98 x 98 ]"));
-        assertTrue(sorted.get(0).getShelves().get(1).toString().equals("{ 97 x 97} [ 97 x 97 ]"));
+                .equals("{ 297 x 100 } [ 100 x 100 ][ 99 x 99 ][ 98 x 98 ]"));
+        assertTrue(sorted.get(0).getShelves().get(1).toString().equals("{ 97 x 97 } [ 97 x 97 ]"));
     }
 
     @Test
@@ -58,8 +57,8 @@ public class CorrectnessTest {
         }
         List<Sheet> sorted = alg.nextFit(shapes);
 
-        for (Sheet s : sorted)
-            System.out.println(s);
+        // for (Sheet s : sorted)
+        // System.out.println(s);
 
         int shapesPerSheet = 0;
         for (Shelf shelf : sorted.get(0).getShelves())
@@ -81,7 +80,12 @@ public class CorrectnessTest {
         shapes.add(new Shape(1, 1));
 
         List<Sheet> sorted = alg.nextFit(shapes);
-        for (Sheet s : sorted)
-            System.out.println(s);
+        // for (Sheet s : sorted)
+        // System.out.println(s);
+        assertEquals("{ 147 x 50 } [ 50 x 50 ][ 49 x 49 ][ 48 x 48 ]", sorted.get(0).getShelves().get(0).toString());
+        assertEquals("{ 300 x 100 } [ 100 x 100 ][ 200 x 75 ]", sorted.get(0).getShelves().get(1).toString());
+        assertEquals("{ 200 x 100 } [ 100 x 100 ][ 100 x 50 ]", sorted.get(0).getShelves().get(2).toString());
+        assertEquals("{ 300 x 250 } [ 200 x 250 ][ 100 x 100 ]", sorted.get(1).getShelves().get(0).toString());
+        assertEquals("{ 1 x 1 } [ 1 x 1 ]", sorted.get(2).getShelves().get(0).toString());
     }
 }

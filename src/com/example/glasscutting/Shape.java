@@ -72,11 +72,17 @@ public class Shape implements Comparable<Shape> {
         return sWidth;
     }
 
+    /**
+     * Override toString method for printing a shape
+     */
     @Override
     public String toString() {
         return String.format("[ %d x %d ]", sWidth, sHeight);
     }
 
+    /**
+     * Compare shapes to each other, by area
+     */
     @Override
     public int compareTo(Shape o) {
         if (getHeight() == o.getHeight() && getWidth() == o.getWidth())

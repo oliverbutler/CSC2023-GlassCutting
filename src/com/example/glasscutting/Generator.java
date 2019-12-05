@@ -34,6 +34,13 @@ public class Generator {
         return shapes;
     }
 
+    /**
+     * Return a random number between two numbers
+     * 
+     * @param min lower bound
+     * @param max upper bound
+     * @return random(min-max)
+     */
     private int getRandomNumberInRange(int min, int max) {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;

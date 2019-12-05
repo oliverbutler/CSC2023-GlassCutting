@@ -76,6 +76,11 @@ public class Sheet {
         return SHEET_WIDTH;
     }
 
+    /**
+     * Returns the used area of a sheet
+     * 
+     * @return the area used of a sheet
+     */
     public int getUsedArea() {
         Integer area = 0;
         for (Shelf shelf : getShelves()) {
@@ -86,10 +91,18 @@ public class Sheet {
         return area;
     }
 
+    /**
+     * Returns the total area of sheet
+     * 
+     * @return the area of a sheet
+     */
     public int getArea() {
         return SHEET_HEIGHT * SHEET_WIDTH;
     }
 
+    /**
+     * Overrides toString to print out a sheet and its content in a detailed mannor
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
