@@ -1,7 +1,5 @@
 package com.example.glasscutting;
 
-import java.util.Comparator;
-
 /**
  * @Purpose: The shape class represents a single shape. DO NOT MODIFY THE
  *           SIGNITURE OF EXISTING METHODS, You may add additional methods if
