@@ -1,5 +1,7 @@
 package com.example.glasscutting;
 
+import java.util.Comparator;
+
 /**
  * @Purpose: The shape class represents a single shape. DO NOT MODIFY THE
  *           SIGNITURE OF EXISTING METHODS, You may add additional methods if
@@ -10,7 +12,7 @@ package com.example.glasscutting;
  * 
  **/
 
-public class Shape implements Comparable<Shape> {
+public class Shape {
 
     private int sWidth; // width of the shape
     private int sHeight; // height of the shape
@@ -78,19 +80,5 @@ public class Shape implements Comparable<Shape> {
     @Override
     public String toString() {
         return String.format("[ %d x %d ]", sWidth, sHeight);
-    }
-
-    /**
-     * Compare shapes to each other, by area
-     */
-    @Override
-    public int compareTo(Shape o) {
-        if (getHeight() == o.getHeight() && getWidth() == o.getWidth())
-            return 0;
-        if (getHeight() == o.getWidth() && getWidth() == o.getHeight())
-            return 0;
-        Integer area1 = getHeight() * getWidth();
-        Integer area2 = o.getHeight() * o.getWidth();
-        return area1.compareTo(area2);
     }
 }

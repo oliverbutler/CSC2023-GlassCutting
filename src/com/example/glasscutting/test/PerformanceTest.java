@@ -27,7 +27,7 @@ public class PerformanceTest {
 
         System.out.println();
 
-        final int noOfReps = 4;
+        final int noOfReps = 10;
         final int shapeLowerBound = 10000;
         final int shapeUpperBound = 50000;
         final int shapeStep = 10000;
@@ -68,9 +68,9 @@ public class PerformanceTest {
                     percentUsed += ((double) used / (double) total) * 100;
 
                 }
-                timeTaken /= 4;
-                noSheets /= 4;
-                percentUsed /= 4;
+                timeTaken /= noOfReps;
+                noSheets /= noOfReps;
+                percentUsed /= noOfReps;
                 String algName;
                 if (algNumber == 0)
                     algName = "nextFit";
