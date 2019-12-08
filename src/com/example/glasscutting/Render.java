@@ -12,6 +12,12 @@ import javax.swing.JPanel;
 
 import com.example.glasscutting.Shelf;
 
+/**
+ * [Not required, ignore this]
+ * 
+ * Class to visually output the sheets in a JPanel, badly implemented and not
+ * meant for marking, as such no comments will be provided.
+ */
 class SheetDisplay extends JPanel {
     /**
      *
@@ -81,7 +87,7 @@ public class Render extends JFrame {
         // jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         // jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(new SheetDisplay(sheets));
-        setTitle("Simple Java 2D example");
+        setTitle("Sheets");
         setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

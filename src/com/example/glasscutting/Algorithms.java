@@ -52,44 +52,47 @@ public class Algorithms {
         int yFreeSheet = 250;
         int noShapes = 0;
 
-        boolean newSheet = true;
-        boolean newShelf = true;
+        boolean newSheet = true; // if this is true, a new sheet will be created
+        boolean newShelf = true; // if this is true, a new shelf will be created for an existing sheet
 
         Sheet sheet = new Sheet();
         Shelf shelf = new Shelf();
 
-        for (Shape shape : shapes) {
+        for (Shape shape : shapes) { // iterate through every shape
             int result = 3;
-            while (result > 1) {
-                if (newSheet || noShapes == 20) {
+            while (result > 1) { // keep trying until it has been successfully inserted
+                if (newSheet || noShapes == 20) { // if a new sheet is required, OR the shape limit has been reached
                     sheet = new Sheet();
                     shelf = new Shelf();
-                    shelf.place(shape);
+                    shelf.place(shape); // you know it will 100% fit, as its a new sheet
                     sheet.addShelf(shelf);
-                    yFreeSheet = sheet.getHeight() - shape.getHeight();
+                    yFreeSheet = sheet.getHeight() - shape.getHeight(); // remove the y space of the shelf from the
+                                                                        // number free for that sheet
                     usedSheets.add(sheet);
                     newSheet = false;
                     newShelf = false;
                     noShapes = 1;
                     result = 0;
                 } else {
-                    if (newShelf) {
-                        result = willFit(shape, sheet.getWidth(), yFreeSheet);
-                        if (result <= 1) {
-                            if (result == 1)
-                                shape.rotate();
-                            shelf = new Shelf();
-                            shelf.place(shape);
-                            sheet.addShelf(shelf);
-                            yFreeSheet -= shape.getHeight();
-                            newShelf = false;
+                    if (newShelf) { // if you need a new shelf, add it here
+                        result = willFit(shape, sheet.getWidth(), yFreeSheet); // try willfit() for the shape
+                        if (result <= 1) { // if it WILL fit
+                            if (result == 1) // if it needs rotating
+                                shape.rotate(); // rotate it
+                            shelf = new Shelf(); // new shelf
+                            shelf.place(shape); // place it
+                            sheet.addShelf(shelf); //
+                            yFreeSheet -= shape.getHeight(); // remove the y height (this is an optimisation)
+                            newShelf = false; // new shelf no longer required
                             noShapes++;
                             break;
                         }
-                        newSheet = true;
+                        newSheet = true; // otherwise a new sheet is required
                     }
-                    result = willFit(shape, sheet.getWidth() - shelf.getWidth(), shelf.getHeight());
-                    if (result <= 1) {
+                    result = willFit(shape, sheet.getWidth() - shelf.getWidth(), shelf.getHeight()); // if you dont need
+                                                                                                     // a new sheet or
+                                                                                                     // shelf
+                    if (result <= 1) { // same as before
                         if (result == 1)
                             shape.rotate();
                         shelf.place(shape);
@@ -97,13 +100,13 @@ public class Algorithms {
                         noShapes++;
                         break;
                     } else {
-                        newShelf = true;
+                        newShelf = true; // if this wont fit on the shelf, get a new shelf
                     }
                 }
             }
         }
 
-        return usedSheets;
+        return usedSheets; // return used sheets
 
     }
 
@@ -122,38 +125,44 @@ public class Algorithms {
      **/
     public List<Sheet> firstFit(List<Shape> shapes) {
 
-        List<Sheet> usedSheets = new ArrayList<Sheet>();
-        List<Integer> yFreeSheet = new ArrayList<Integer>();
-        List<Integer> noShapes = new ArrayList<Integer>();
+        List<Sheet> usedSheets = new ArrayList<Sheet>(); // list to hold sheets
+        List<Integer> yFreeSheet = new ArrayList<Integer>(); // list to holds the y space free for each sheet, this is
+                                                             // an optimsation instead of always looping through the
+                                                             // sheets contents to find y space free.
+        List<Integer> noShapes = new ArrayList<Integer>(); // this is another optimsation to hold the number of shapes
+                                                           // on each sheet
 
         Sheet sheet;
         Shelf shelf;
 
-        for (Shape shape : shapes) {
+        for (Shape shape : shapes) { // for each shape
             Integer result = 3;
-            while (result > 1) {
-                for (int sheetNo = 0; sheetNo <= usedSheets.size(); sheetNo++) {
+            while (result > 1) { // keep going until it is placed
+                for (int sheetNo = 0; sheetNo <= usedSheets.size(); sheetNo++) { // loop through the sheets, also loop
+                                                                                 // one out of bounds
                     if (sheetNo == usedSheets.size()) { // if a new sheet is required
                         sheet = new Sheet();
                         shelf = new Shelf();
                         shelf.place(shape);
                         sheet.addShelf(shelf);
-                        yFreeSheet.add(sheet.getHeight() - shape.getHeight());
-                        noShapes.add(1);
+                        yFreeSheet.add(sheet.getHeight() - shape.getHeight()); // same as next fit but we are using a
+                                                                               // list for efficiency
+                        noShapes.add(1); // same as above
                         usedSheets.add(sheet);
-                        result = 0;
+                        result = 0; // ensure the loop is broken and the next shape is called
                     } else {
-                        sheet = usedSheets.get(sheetNo);
-                        for (int shelfNo = 0; shelfNo <= sheet.getShelves().size(); shelfNo++) {
+                        sheet = usedSheets.get(sheetNo); // get the sheet
+                        for (int shelfNo = 0; shelfNo <= sheet.getShelves().size(); shelfNo++) { // for every shelf in
+                                                                                                 // the sheet
                             if (shelfNo == sheet.getShelves().size()) { // if last shelf on a sheet
                                 result = willFit(shape, sheet.getWidth(), yFreeSheet.get(sheetNo));
-                                if (noShapes.get(sheetNo) == 20) {
+                                if (noShapes.get(sheetNo) == 20) { // if this is the max, we need a new sheet
                                     result = 2;
                                     break;
                                 }
-                                if (result <= 1) {
-                                    if (result == 1)
-                                        shape.rotate();
+                                if (result <= 1) { // if it WILL fit
+                                    if (result == 1) // if it WILL fit if its rotated
+                                        shape.rotate(); // rotate it
                                     shelf = new Shelf();
                                     shelf.place(shape);
                                     sheet.addShelf(shelf);
@@ -162,30 +171,28 @@ public class Algorithms {
                                     break;
                                 }
                             } else {
-                                shelf = sheet.getShelves().get(shelfNo);
-                                result = willFit(shape, sheet.getWidth() - shelf.getWidth(), shelf.getHeight());
-                                if (noShapes.get(sheetNo) == 20) {
+                                shelf = sheet.getShelves().get(shelfNo); // if the shelf aready exists
+                                result = willFit(shape, sheet.getWidth() - shelf.getWidth(), shelf.getHeight()); // try
+                                                                                                                 // fit
+                                if (noShapes.get(sheetNo) == 20) { // if max, new sheet required
                                     result = 2;
                                     break;
                                 }
-                                if (result <= 1) {
-                                    if (result == 1)
-                                        shape.rotate();
-                                    shelf.place(shape);
-                                    noShapes.set(sheetNo, noShapes.get(sheetNo) + 1);
+                                if (result <= 1) { // if it WILL fit
+                                    if (result == 1) // if it WILL fit if rotated
+                                        shape.rotate(); // rotate it
+                                    shelf.place(shape); // place the shape
+                                    noShapes.set(sheetNo, noShapes.get(sheetNo) + 1); // add one to the list for shapes
                                     break;
                                 }
                             }
                         }
                     }
-                    if (result <= 1)
+                    if (result <= 1) // break out of this loop
                         break;
                 }
-
             }
         }
-
         return usedSheets;
     }
-
 }

@@ -71,7 +71,7 @@ public class CorrectnessTest {
         dataSet3.add(new Shape(50, 50));
         dataSet3.add(new Shape(50, 50));
         dataSet3.add(new Shape(50, 50));
-        dataSet3.add(new Shape(250, 300));
+        dataSet3.add(new Shape(300, 250));
     }
 
     @Test

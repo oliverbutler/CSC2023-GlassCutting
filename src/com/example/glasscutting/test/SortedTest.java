@@ -38,14 +38,9 @@ public class SortedTest {
                 + padString("Sheets", 15) + padString("Percent Used", 15));
         System.out.println("=".repeat(80));
 
-        long[] nextTimes = new long[3];
-        Arrays.fill(nextTimes, 0);
-        long[] firstTimes = new long[3];
-        Arrays.fill(firstTimes, 0);
-
-        for (int reverse = 0; reverse < 2; reverse++) {
-            for (int algNumber = 0; algNumber < 2; algNumber++) {
-                for (int sortNumber = 0; sortNumber < 3; sortNumber++) {
+        for (int reverse = 0; reverse < 2; reverse++) { // for normal + reverse
+            for (int algNumber = 0; algNumber < 2; algNumber++) { // for each algorithm
+                for (int sortNumber = 0; sortNumber < 3; sortNumber++) { // for each sort
                     double timeTaken = 0;
                     int noSheets = 0;
                     double percentUsed = 0;
@@ -53,7 +48,7 @@ public class SortedTest {
                     for (int i = 0; i < noOfReps; i++) {
                         List<Shape> unsorted = shapeGenerator.generateShapeList(noOfShapes);
                         List<Sheet> sorted;
-                        switch (sortNumber) {
+                        switch (sortNumber) { // sort based on specific parameter
                         case 0:
                             Collections.sort(unsorted, new sortByWidth());
                             break;
@@ -66,7 +61,7 @@ public class SortedTest {
                         }
                         if (reverse == 1)
                             Collections.reverse(unsorted);
-                        long startTime = System.nanoTime();
+                        long startTime = System.nanoTime(); // do with certain algorithm
                         if (algNumber == 0)
                             sorted = algorithms.nextFit(unsorted);
                         else
@@ -95,7 +90,7 @@ public class SortedTest {
                     else
                         algName = "firstFit";
 
-                    String sortName;
+                    String sortName; // printing out the table
                     if (sortNumber == 0)
                         sortName = "width";
                     else if (sortNumber == 1)
@@ -118,6 +113,13 @@ public class SortedTest {
         }
     }
 
+    /**
+     * Takes a string and pads it out to fill a certain size, used for the table
+     * 
+     * @param str  Input string
+     * @param leng Integer for the length of the whole new string
+     * @return New, padded string
+     */
     public static String padString(String str, int leng) {
         for (int i = str.length(); i <= leng; i++)
             str += " ";
@@ -125,6 +127,9 @@ public class SortedTest {
     }
 }
 
+/**
+ * Sort the shapes by width
+ */
 class sortByWidth implements Comparator<Shape> {
     public int compare(Shape a, Shape b) {
         Integer var1 = a.getWidth();
@@ -133,6 +138,9 @@ class sortByWidth implements Comparator<Shape> {
     }
 }
 
+/**
+ * Sort the shapes by height
+ */
 class sortByHeight implements Comparator<Shape> {
     public int compare(Shape a, Shape b) {
         Integer var1 = a.getHeight();
@@ -141,6 +149,9 @@ class sortByHeight implements Comparator<Shape> {
     }
 }
 
+/**
+ * Sort the shapes by area
+ */
 class sortByArea implements Comparator<Shape> {
     public int compare(Shape a, Shape b) {
         Integer var1 = a.getWidth() * a.getHeight();
